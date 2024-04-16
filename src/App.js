@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
+import { useState } from "react";
 
 function App() {
+  let [response, setResponse] = useState("");
+  const handleForChange = (event) => {
+    const epochTime = new Date(`${event.target.value} 06:00`);
+    const epochTimeZone = epochTime.getTime();
+    fetch(`http://localhost:3001/bookCultClass?epochTime=${epochTimeZone}`)
+      .then((res) => res.json())
+      .then((result) => {
+        setResponse(JSON.stringify(result, null, 6));
+      });
+  };
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+      <div>
+        <input
+          type="date"
+          onChange={handleForChange}
+          style={{ fontSize: "34px", fontFamily: "nano" }}
+        ></input>
+        <pre
+          style={{ fontSize: "24px", fontFamily: "nano", textAlign: "left" }}
         >
-          Learn React
-        </a>
-      </header>
+          {response}
+        </pre>
+      </div>
     </div>
   );
 }
