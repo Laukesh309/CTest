@@ -1,0 +1,5 @@
+ClumnTransformer(transformers=[('ohe', 
+OneHotEncoder(handle_unknown='ignore'),
+    "ExistingSavings',['CheckingStatus','CreditHistory','LoanPurpose','EmploymentDuration', 'Sex', 'OthersOnLoan','OwnsProperty',InstallmentPlans', 'Housing','Job', 'Telephone','ForeignWorker'
+])
+])

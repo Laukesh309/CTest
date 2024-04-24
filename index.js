@@ -3,15 +3,15 @@ const axios = require("axios");
 const app = express();
 var cors = require("cors");
 app.use(cors());
-function bookCultClass(epochTime) {
-  console.log("epochTime-->", epochTime);
+function bookCultClass(epochTime, slotId) {
+  console.log("epochTime-->", epochTime, slotId);
   let data = JSON.stringify({
-    classId: "2",
+    classId: slotId,
     productType: "PLAY",
     workoutId: 350,
     centerId: 1152,
     bookingTimestamp: epochTime,
-    slotId: "2",
+    slotId: slotId,
   });
 
   let config = {
@@ -62,11 +62,17 @@ rule.hour = [4, 5];
 rule.minute = 0;
 rule.second = [2, 6, 10];
 
-const job = schedule.scheduleJob(rule, function () {
+const job = schedule.scheduleJob(rule, function (props) {
   let dateObject = new Date();
   let date = ("0" + dateObject.getDate()).slice(-2);
   let month = ("0" + (dateObject.getMonth() + 1)).slice(-2);
   let year = dateObject.getFullYear();
-  let epochTime = new Date(`${month}/${date}/${year} 06:00`);
-  bookCultClass(epochTime.getTime());
+  let epochTime =
+    props.getHours() == 4
+      ? new Date(`${month}/${date}/${year} 06:00`)
+      : new Date(`${month}/${date}/${year} 07:00`);
+  let minute = dateObject.getMinutes();
+  let second = dateObject.getSeconds();
+  let slotId = props.getHours() == 4 ? 2 : 3;
+  bookCultClass(epochTime.getTime(), slotId);
 });
